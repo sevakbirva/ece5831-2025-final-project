@@ -8,12 +8,12 @@ Core idea: instead of training separate models per task, we train a **hierarchic
 
 ## Links
 
-- **Pre-recorded presentation video:** [Watch here](PASTE_LINK_HERE)
-- **Presentation slides:** [View slides](PASTE_LINK_HERE)
-- **Final report:** [Read report](PASTE_LINK_HERE)
+- **Pre-recorded presentation video:** [Watch here](https://youtu.be/lKdaZDTApao)
+- **Presentation slides:** [View slides](https://github.com/sevakbirva/ece5831-2025-final-project/blob/main/reports/HVAE_Micromobility_Presentation.pptx)
+- **Final report:** [Read report](https://github.com/sevakbirva/ece5831-2025-final-project/blob/main/reports/ECE5831_project_final_report_BirvaSevak_ShrenikJadhav.pdf)
 - **Dataset (raw):** 2024–2025 Divvy bike sharing data (Cyclistic) on Kaggle:  
   https://www.kaggle.com/datasets/miaadnabizadeh/20242025-divvy-bike-sharing-data-cyclistic
-- **Demo video (pipeline / model inference):** [Watch demo](PASTE_LINK_HERE)
+- **Demo video (pipeline / model inference):** [Watch demo](https://youtu.be/j_nKluUBw9k)
 
 
 ---
