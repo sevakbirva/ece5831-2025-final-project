@@ -131,3 +131,118 @@ Figures used in the report/paper are stored in `figures/`:
 - `figures/figure4.png`
 
 ---
+
+## Results and Discussion
+
+All results are reported on a strict temporal **March 2025 test split** using the same feature set for the hierarchical multi-task VAE (HVAE) and the corresponding single-task baselines.
+
+### Experimental Setup
+
+**Dataset:** 5,772,527 valid trips (Apr 2024 → Mar 2025)  
+**Temporal split (leakage-safe):**
+
+| Split | Date range | Trips | Share |
+|---|---|---:|---:|
+| Train | Apr 2024 – Jan 2025 | 4,681,394 | 81.1% |
+| Val | Feb 2025 | 486,732 | 8.4% |
+| Test | Mar 2025 | 604,401 | 10.5% |
+
+**Tasks evaluated (test set):**
+- **Duration prediction:** regression on `log1p(duration_minutes)`
+- **Demand contribution:** regression on normalized target in \[0, 1\]
+- **Rideable type:** 3-class classification (electric bike, classic bike, electric scooter)
+
+**Baselines (single-task):** XGBoost (duration), Ridge regression (demand), Random Forest (rideable type)
+
+---
+
+### Test Set Performance: HVAE vs Single-Task Baselines
+
+| Task and Metric | HVAE | Baseline |
+|---|---:|---:|
+| **Duration prediction (log1p minutes)** |  |  |
+| MAE | **0.186** | 0.277 |
+| RMSE | **0.237** | 0.354 |
+| R² | **0.905** | 0.788 |
+| **Demand contribution (normalized)** |  |  |
+| MAE | **0.0087** | 0.0124 |
+| RMSE | **0.0163** | 0.0241 |
+| R² | **0.723** | 0.589 |
+| **Rideable type classification** |  |  |
+| Accuracy (%) | **89.86** | 84.17 |
+| Macro F1 | **0.809** | — |
+| Weighted F1 | **0.899** | — |
+
+**Summary of gains (test set):**
+- Duration: **~32.9% lower MAE** and **~33.1% lower RMSE**, with higher R² (0.905 vs 0.788).
+- Demand: **~29.8% lower MAE** and **~32.4% lower RMSE**, with higher R² (0.723 vs 0.589).
+- Rideable type: **+5.69 percentage points** accuracy improvement (89.86% vs 84.17%).
+
+---
+
+### Rideable Type Classification: Confusion Matrix (Test Set, N = 604,401)
+
+| True \ Pred | E-Bike | Classic | Scooter | Total |
+|---|---:|---:|---:|---:|
+| **Electric Bike** | 287,421 | 26,143 | 5,648 | 319,212 |
+| **Classic Bike** | 21,842 | 245,127 | 2,613 | 269,582 |
+| **Electric Scooter** | 3,217 | 1,824 | 10,566 | 15,607 |
+| **Total** | 312,480 | 273,094 | 18,827 | 604,401 |
+
+Per-class F1: **E-Bike 0.910**, **Classic 0.903**, **Scooter 0.614** (Macro F1 = 0.809).  
+The dominant error mode is **electric vs classic bike confusion**, while scooter performance is lower due to strong class imbalance and more heterogeneous usage.
+
+---
+
+### Latent Space Clustering: Discovered Trip “Intent” Modes (K = 8)
+
+We extracted the **global latent** representation and applied **k-means (K = 8)** on the test set to discover interpretable behavioral modes.
+
+| Cluster | Trips (%) | Avg Dur (min) | Casual (%) | Weekend (%) | E-Bike (%) | Roundtrip (%) | Peak Hr (%) | Interpretation |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| C0 | 18.7 | 8.2 | 12.4 | 8.1 | 51.3 | 2.1 | 68.4 | Weekday Commute |
+| C1 | 15.3 | 24.6 | 78.9 | 89.4 | 62.1 | 4.7 | 12.3 | Weekend Leisure |
+| C2 | 14.1 | 42.3 | 91.2 | 67.8 | 58.4 | 8.9 | 8.7 | Tourist Exploration |
+| C3 | 12.8 | 6.1 | 15.7 | 11.2 | 47.8 | 1.8 | 61.2 | Short Errands |
+| C4 | 11.4 | 15.7 | 34.2 | 31.5 | 54.2 | 3.4 | 38.1 | Mixed Purpose |
+| C5 | 10.9 | 11.3 | 18.9 | 14.6 | 49.1 | 67.8 | 21.4 | Roundtrip Exercise |
+| C6 | 9.2 | 7.4 | 9.8 | 7.3 | 45.2 | 1.6 | 74.3 | Rush Hour Transit |
+| C7 | 7.6 | 38.1 | 86.4 | 73.2 | 61.7 | 12.3 | 11.2 | Lakefront Recreation |
+
+These clusters align with expected mobility patterns (e.g., commute vs leisure), despite using **no explicit intent labels**.
+
+---
+
+### Reconstruction-Based Anomaly Scoring (Unsupervised)
+
+We use the HVAE reconstruction-based anomaly score as an unsupervised signal for unusual trips. The test-set score distribution is right-skewed; practical operating points can be set via percentiles:
+
+| Threshold | Score | Trips flagged | Share |
+|---|---:|---:|---:|
+| p95 | 2.57 | 30,221 | 5.00% |
+| p99 | 4.87 | 6,045 | 1.00% |
+
+We define anomalies as trips above **p99** and manually reviewed the **top 200** highest-scoring trips:
+
+| Anomaly Type | Count | % |
+|---|---:|---:|
+| Temporal anomalies | 68 | 34.0 |
+| Behavioral anomalies | 56 | 28.0 |
+| Spatial anomalies | 42 | 21.0 |
+| Vehicle mismatch | 34 | 17.0 |
+| **Total** | 200 | 100.0 |
+
+---
+
+### Key Takeaways
+
+- **Joint multi-task learning improves accuracy across tasks**: HVAE outperforms single-task baselines for duration, demand contribution, and rideable type classification.
+- **The learned latent space is behaviorally meaningful**: clustering the global latent codes recovers commute-, leisure-, and tourism-like modes consistent with real-world usage.
+- **Reconstruction scores provide an operational anomaly signal**: percentile thresholds (p95/p99) offer a simple, tunable method to flag rare trips for review.
+
+
+## Author Contributions
+
+**Birva Sevak:** Exploratory Data Analysis, HVAE model design and implementation, training and optimization, latent-space clustering and interpretability analysis, anomaly scoring analysis, and manuscript editing.
+
+**Shrenik Jadhav:** Data preprocessing pipeline (Phases 1--3), feature engineering, baseline model training, experiment execution, results analysis, and manuscript writing.
