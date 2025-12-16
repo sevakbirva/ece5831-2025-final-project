@@ -8,14 +8,13 @@ Core idea: instead of training separate models per task, we train a **hierarchic
 
 ## Links
 
-- **Pre-recorded presentation video:** [Watch here](https://youtu.be/lKdaZDTApao)
-- **Presentation slides:** [View slides](https://github.com/sevakbirva/ece5831-2025-final-project/blob/main/reports/HVAE_Micromobility_Presentation.pptx)
-- **Final report:** [Read report](https://github.com/sevakbirva/ece5831-2025-final-project/blob/main/reports/ECE5831_project_final_report_BirvaSevak_ShrenikJadhav.pdf)
+- **Google Drive Folder:** [ece5831-2025-final-project](https://drive.google.com/drive/folders/1K0wVZiQb_MqqgwOnEKR4e8Rfm-mGZNm-)
+- **Pre-recorded presentation video:** [Watch here](https://youtu.be/lKdaZDTApao) OR [Google Drive Presentation](https://drive.google.com/file/d/11G5-F6A4Z7R4FCHKIELwwaxPok2-hslH/view?usp=drive_link)
+- **Presentation slides:** [View slides - GitHub](https://github.com/sevakbirva/ece5831-2025-final-project/blob/main/reports/HVAE_Micromobility_Presentation.pptx) OR [Slide - Google Drive](https://docs.google.com/presentation/d/1KFsdnlbEVgcu2VQR1PYWpdxOrlMdpfLk/edit?usp=drive_link&ouid=113843156497153318057&rtpof=true&sd=true)
+- **Final report:** [Read report - GitHub](https://github.com/sevakbirva/ece5831-2025-final-project/blob/main/reports/ECE5831_project_final_report_BirvaSevak_ShrenikJadhav.pdf) OR [Report - Google Drive](https://drive.google.com/file/d/1Vlg6_5o1L7xY6GzM_KtvI6FyTlpd3GQV/view?usp=drive_link)
 - **Dataset (raw):** 2024–2025 Divvy bike sharing data (Cyclistic) on Kaggle:  
-  https://www.kaggle.com/datasets/miaadnabizadeh/20242025-divvy-bike-sharing-data-cyclistic
-- **Demo video (pipeline / model inference):** [Watch demo](https://youtu.be/j_nKluUBw9k)
-
-
+  https://www.kaggle.com/datasets/miaadnabizadeh/20242025-divvy-bike-sharing-data-cyclistic OR [Google Drive: data/raw-data.zip](https://drive.google.com/drive/folders/14JzsFWILweuwDEpD0-m3p5-J2T0HK3Qo?usp=drive_link)
+- **Demo video (pipeline / model inference):** [Watch demo - YouTube](https://youtu.be/j_nKluUBw9k) OR [Google Drive Demo](https://drive.google.com/file/d/1-XvjkzODMFo-zWhPWwgNS9iEhV_Ob-dm/view?usp=drive_link)
 ---
 
 ## What This Project Does
